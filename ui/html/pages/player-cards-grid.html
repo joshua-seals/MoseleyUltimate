@@ -1,0 +1,175 @@
+{{ define "title" }} Player Cards {{ end }}
+
+{{ define "main" }}    
+ 
+<style>
+    .grid-box {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    .card {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .name-container {
+        background-color: #e0e0e0;
+        padding: 10px;
+    }
+    .player-name {
+        margin: 0;
+        font-size: 1.2em;
+    }
+    /* .player-image {
+        width: 100%;
+        height: 225px;
+        object-fit: cover;
+    } */
+    .player-image {
+    width: 100%;
+    height: 225px;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    }
+    .card-content {
+        padding: 15px;
+    }
+    .stat-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .stat-label {
+        font-weight: bold;
+        flex: 1;
+    }
+    .stat-boxes {
+        display: flex;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .stat-box {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        border-right: 1px solid #ccc;
+    }
+    .stat-box:last-child {
+        border-right: none;
+    }
+    .stat-box.highlighted {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .style-container {
+        margin-top: 15px;
+    }
+    .style-header {
+        margin: 0 0 5px 0;
+        font-size: 1em;
+    }
+    .style-description {
+        margin: 0;
+        font-size: 0.9em;
+        color: #666;
+    }
+</style>
+<body>
+<div class="grid-box">
+<div class="grid">
+    {{range .Players}}
+    <div class="card">
+        <div class="name-container">
+            <h2 class="player-name">{{.Name}}</h2>
+        </div>
+        <img src="{{.Image}}" alt="{{.Name}}'s picture" class="player-image">
+        <div class="card-content">
+            <div class="stat-container">
+                <span class="stat-label">Games:</span>
+                <span class="stat-value">{{.GamesPlayed}}</span>
+            </div>
+            <div class="stat-container">
+                <span class="stat-label">Offense:</span>
+                <div class="stat-boxes">
+                    <div class="stat-box {{if le 1 .Offense}}highlighted{{end}}">1</div>
+                    <div class="stat-box {{if le 2 .Offense}}highlighted{{end}}">2</div>
+                    <div class="stat-box {{if le 3 .Offense}}highlighted{{end}}">3</div>
+                    <div class="stat-box {{if le 4 .Offense}}highlighted{{end}}">4</div>
+                    <div class="stat-box {{if le 5 .Offense}}highlighted{{end}}">5</div>
+                    <div class="stat-box {{if le 6 .Offense}}highlighted{{end}}">6</div>
+                    <div class="stat-box {{if le 7 .Offense}}highlighted{{end}}">7</div>
+                    <div class="stat-box {{if le 8 .Offense}}highlighted{{end}}">8</div>
+                    <div class="stat-box {{if le 9 .Offense}}highlighted{{end}}">9</div>
+                    <div class="stat-box {{if le 10 .Offense}}highlighted{{end}}">10</div>
+                </div>
+            </div>
+            <div class="stat-container">
+                <span class="stat-label">Defense:</span>
+                <div class="stat-boxes">
+                    <div class="stat-box {{if le 1 .Defense}}highlighted{{end}}">1</div>
+                    <div class="stat-box {{if le 2 .Defense}}highlighted{{end}}">2</div>
+                    <div class="stat-box {{if le 3 .Defense}}highlighted{{end}}">3</div>
+                    <div class="stat-box {{if le 4 .Defense}}highlighted{{end}}">4</div>
+                    <div class="stat-box {{if le 5 .Defense}}highlighted{{end}}">5</div>
+                    <div class="stat-box {{if le 6 .Defense}}highlighted{{end}}">6</div>
+                    <div class="stat-box {{if le 7 .Defense}}highlighted{{end}}">7</div>
+                    <div class="stat-box {{if le 8 .Defense}}highlighted{{end}}">8</div>
+                    <div class="stat-box {{if le 9 .Defense}}highlighted{{end}}">9</div>
+                    <div class="stat-box {{if le 10 .Defense}}highlighted{{end}}">10</div>
+                </div>
+            </div>
+            <div class="stat-container">
+                <span class="stat-label">Speed:</span>
+                <div class="stat-boxes">
+                    <div class="stat-box {{if le 1 .Speed}}highlighted{{end}}">1</div>
+                    <div class="stat-box {{if le 2 .Speed}}highlighted{{end}}">2</div>
+                    <div class="stat-box {{if le 3 .Speed}}highlighted{{end}}">3</div>
+                    <div class="stat-box {{if le 4 .Speed}}highlighted{{end}}">4</div>
+                    <div class="stat-box {{if le 5 .Speed}}highlighted{{end}}">5</div>
+                    <div class="stat-box {{if le 6 .Speed}}highlighted{{end}}">6</div>
+                    <div class="stat-box {{if le 7 .Speed}}highlighted{{end}}">7</div>
+                    <div class="stat-box {{if le 8 .Speed}}highlighted{{end}}">8</div>
+                    <div class="stat-box {{if le 9 .Speed}}highlighted{{end}}">9</div>
+                    <div class="stat-box {{if le 10 .Speed}}highlighted{{end}}">10</div>
+                </div>
+            </div>
+            <div class="stat-container">
+                <span class="stat-label">Endurance:</span>
+                <div class="stat-boxes">
+                    <div class="stat-box {{if le 1 .Endurance}}highlighted{{end}}">1</div>
+                    <div class="stat-box {{if le 2 .Endurance}}highlighted{{end}}">2</div>
+                    <div class="stat-box {{if le 3 .Endurance}}highlighted{{end}}">3</div>
+                    <div class="stat-box {{if le 4 .Endurance}}highlighted{{end}}">4</div>
+                    <div class="stat-box {{if le 5 .Endurance}}highlighted{{end}}">5</div>
+                    <div class="stat-box {{if le 6 .Endurance}}highlighted{{end}}">6</div>
+                    <div class="stat-box {{if le 7 .Endurance}}highlighted{{end}}">7</div>
+                    <div class="stat-box {{if le 8 .Endurance}}highlighted{{end}}">8</div>
+                    <div class="stat-box {{if le 9 .Endurance}}highlighted{{end}}">9</div>
+                    <div class="stat-box {{if le 10 .Endurance}}highlighted{{end}}">10</div>
+                </div>
+            </div>
+            <div class="style-container">
+                <h3 class="style-header">Style:</h3>
+                <p class="style-description">{{.Style}}</p>
+            </div>
+        </div>
+    </div>
+    {{end}}
+</div>
+</div>
+</body>
+{{ end }}

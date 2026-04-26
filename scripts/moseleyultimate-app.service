@@ -1,0 +1,14 @@
+[Unit]
+Description=Moseley Ultimate App
+After=network.target
+
+[Service]
+ExecStart=/opt/moseleyultimate/moseleyultimate
+WorkingDirectory=/opt/moseleyultimate
+Restart=always
+RestartSec=5
+User=frisbeeUser
+Environment=ENV=production
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,22 @@
+services:
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./conf:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+  moseleyultimate:
+    image: joshuaseals/moseleyultimate:v1.0.0
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ui:/moseleyultimate/ui
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,82 @@
+{{ define "modal" }}
+<div class="modal-body">
+  <ul class="nav nav-tabs" id="authTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab" aria-controls="signup" aria-selected="false">Sign Up</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="authTabsContent">
+    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+      <form id="loginForm" class="mt-3" action="/login" method='POST' enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="loginEmail" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
+        </div>
+        <div class="mb-3">
+          <label for="loginPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="rememberMe">
+          <label class="form-check-label" for="rememberMe">Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+    <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+      <form id="signupForm" class="mt-3" action='/signup' method='POST' enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="signupName" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="signupName" name="signupName" required>
+        </div>
+        <div class="mb-3">
+          <label for="signupEmail" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="signupEmail" name="signupEmail" required>
+        </div>
+        <div class="mb-3">
+          <label for="signupPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="signupPassword" name="signupPassword" required minlength="7">
+        </div>
+        <div class="mb-3">
+          <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="signupConfirmPassword" name="signupConfirmPassword" required minlength="7">
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+          <label class="form-check-label" for="agreeTerms">Terms and Conditions: I agree to be respectful to others, encouraging and nice 🙂 and submit my behaviour on this system to the discretion of the administrator who may delete my account completely. This site is personally owned/developed/maintained and potentially volitile, data (images) could be lost forever due to system maintenance/shutdown. My usage of this site does not constitute ownership in any way. </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Add your login logic here
+    console.log('Login submitted');
+  });
+
+  signupForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var password = document.getElementById('signupPassword').value;
+    var confirmPassword = document.getElementById('signupConfirmPassword').value;
+  
+    if (password !== confirmPassword) {
+      alert('Passwords do not match.');
+      return // Prevent form submission
+    }
+    signupForm.submit();
+    console.log('Signup submitted');
+  });
+});
+</script>
+{{ end }}

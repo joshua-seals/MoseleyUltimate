@@ -1,0 +1,225 @@
+{{define "title"}}New Player{{end}}
+
+{{define "main"}}
+<div class="container">
+    <h1 class="form-title">Create New Player</h1>
+    <form action='/players/new' method='POST' class="player-form" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type='text' id="name" name='Name' required maxlength="50">
+        </div>
+        <div class="form-group">
+            <label for="image">Player Image (Optional, Max 5MB):</label>
+            <div id="drop-area" class="drop-area">
+                <input type="file" id="fileElem" name="image" accept="image/*" onchange="handleFiles(this.files)">
+                <label class="button" for="fileElem">Select an image file</label>
+                <p>or drag and drop here</p>
+                <div id="gallery" class="gallery"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="offense">Offense:</label>
+            <div class="stat-input">
+                <input type="range" id="offense" name="Offense" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="defense">Defense:</label>
+            <div class="stat-input">
+                <input type="range" id="defense" name="Defense" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="speed">Speed:</label>
+            <div class="stat-input">
+                <input type="range" id="speed" name="Speed" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endurance">Endurance:</label>
+            <div class="stat-input">
+                <input type="range" id="endurance" name="Endurance" min="1" max="10" value="5" oninput="this.nextElementSibling.value = this.value">
+                <output>5</output>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="style">Style: <span id="char-count">0</span>/150</label>
+            <textarea id="style" name='Style' rows="3" maxlength="150" required oninput="updateCharCount(this)"></textarea>
+        </div>
+        <div class="form-group">
+            <input type='submit' value='Create Player' class="submit-btn">
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        font-family: Arial, sans-serif;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .form-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .player-form {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .stat-input {
+        display: flex;
+        align-items: center;
+    }
+    input[type="range"] {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+    output {
+        width: 30px;
+        text-align: center;
+    }
+    .submit-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+    .submit-btn:hover {
+        background-color: #45a049;
+    }
+    #char-count {
+        font-weight: normal;
+        color: #666;
+    }
+    .drop-area {
+        border: 2px dashed #ccc;
+        border-radius: 20px;
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+    .drop-area.highlight {
+        border-color: #4CAF50;
+        background-color: #e8f5e9;
+    }
+    .button {
+        display: inline-block;
+        padding: 10px;
+        background: #4CAF50;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .button:hover {
+        background: #45a049;
+    }
+    .gallery {
+        margin-top: 10px;
+    }
+    .gallery img {
+        max-width: 100%;
+        max-height: 200px;
+        margin-bottom: 10px;
+    }
+    #fileElem {
+        display: none;
+    }
+</style>
+
+<script>
+function updateCharCount(textarea) {
+    const charCount = textarea.value.length;
+    document.getElementById('char-count').textContent = charCount;
+}
+
+let dropArea = document.getElementById('drop-area');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropArea.classList.add('highlight');
+}
+
+function unhighlight(e) {
+    dropArea.classList.remove('highlight');
+}
+
+dropArea.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+    handleFiles(files);
+}
+
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File is too large. Maximum size is 5MB.');
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file.');
+            return;
+        }
+        uploadFile(file);
+    }
+}
+
+function uploadFile(file) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function() {
+        let img = document.createElement('img');
+        img.src = reader.result;
+        document.getElementById('gallery').innerHTML = '';
+        document.getElementById('gallery').appendChild(img);
+    }
+}
+</script>
+{{end}}
