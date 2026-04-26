@@ -11,10 +11,12 @@ services:
       - caddy_data:/data
       - caddy_config:/config
   moseleyultimate:
-    image: joshuaseals/moseleyultimate:v1.0.0
+    build: .
     restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     volumes:
       - ./ui:/moseleyultimate/ui
 volumes:

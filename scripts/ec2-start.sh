@@ -1,5 +1,7 @@
 #!/bin/bash
-dnf install -y docker curl
+ADMIN_PASSWORD="change_this_password"
+
+dnf install -y docker curl git
 systemctl enable docker
 systemctl start docker
 usermod -aG docker ec2-user
@@ -12,6 +14,10 @@ cd /home/ec2-user
 git clone https://github.com/joshua-seals/MoseleyUltimate.git
 chown -R ec2-user:ec2-user MoseleyUltimate
 
-sudo systemctl daemon-reexec
-sudo systemctl daemon-reload
-sudo systemctl enable moseleyultimate-app.service
+cd MoseleyUltimate
+
+echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}" > .env
+chmod 600 .env
+chown ec2-user:ec2-user .env
+
+docker compose up -d --build
