@@ -9,6 +9,7 @@ Restart=always
 RestartSec=5
 User=frisbeeUser
 Environment=ENV=production
+EnvironmentFile=/opt/moseleyultimate/.env
 
 [Install]
 WantedBy=multi-user.target

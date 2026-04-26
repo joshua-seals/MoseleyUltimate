@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+
+	"github.com/joshua-seals/MoseleyUltimate/internal/models"
 )
 
 type App struct {
@@ -14,6 +16,16 @@ func main() {
 	app := App{}
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	app.logger = logger
+
+	adminPass := os.Getenv("ADMIN_PASSWORD")
+	if adminPass == "" {
+		adminPass = "changeme"
+		logger.Warn("ADMIN_PASSWORD not set, using default. Set ADMIN_PASSWORD env var in production.")
+	}
+	if err := models.InitAdmin(adminPass); err != nil {
+		logger.Error("Failed to initialize admin", "error", err)
+		os.Exit(1)
+	}
 
 	server := http.Server{
 		// If address is changed, ensure changes to playerForm url

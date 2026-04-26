@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/joshua-seals/NextonFrisbeeClub/internal/models"
+	"github.com/joshua-seals/MoseleyUltimate/internal/models"
 )
 
 var ErrTooLarge = errors.New("file too large")

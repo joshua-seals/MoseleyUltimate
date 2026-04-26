@@ -19,6 +19,13 @@ func (app *App) Routes() *http.ServeMux {
 
 	r.HandleFunc("POST /ultimate/game/{status}", app.gameStatus)
 
+	// Admin routes
+	r.HandleFunc("GET /admin", app.adminDashboard)
+	r.HandleFunc("GET /admin/login", app.adminLoginPage)
+	r.HandleFunc("POST /admin/login", app.adminLogin)
+	r.HandleFunc("POST /admin/logout", app.adminLogout)
+	r.HandleFunc("POST /admin/game-status", app.adminGameStatus)
+
 	// r.HandleFunc("GET /players/new", app.playerForm)
 	// r.HandleFunc("POST /players/new", app.regsiterPlayerForm)
 

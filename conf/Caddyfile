@@ -1,2 +1,2 @@
 moseleyultimate.com
-  reverse_proxy nfc:3000
+  reverse_proxy moseleyultimate:3000

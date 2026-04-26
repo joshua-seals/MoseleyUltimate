@@ -11,6 +11,7 @@ type templateData struct {
 	Players    []*models.Player
 	GameStatus string
 	Date       string
+	Flash      string
 }
 
 // Use later once front-end work is complete

@@ -9,9 +9,9 @@ curl -SL https://github.com/docker/compose/releases/latest/download/docker-compo
 chmod +x /usr/libexec/docker/cli-plugins/docker-compose
 
 cd /home/ec2-user
-git clone https://github.com/joshua-seals/NextonFrisbeeClub.git
-chown -R ec2-user:ec2-user NextonFrisbeeClub 
+git clone https://github.com/joshua-seals/MoseleyUltimate.git
+chown -R ec2-user:ec2-user MoseleyUltimate
 
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
-sudo systemctl enable nextonfrisbee-app.service
+sudo systemctl enable moseleyultimate-app.service

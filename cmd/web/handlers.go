@@ -149,3 +149,79 @@ func (app *App) gameStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+// Admin login page
+func (app *App) adminLoginPage(w http.ResponseWriter, r *http.Request) {
+	page := "./ui/html/pages/admin-login.html"
+	app.render(w, http.StatusOK, page, &templateData{})
+}
+
+// Admin login handler
+func (app *App) adminLogin(w http.ResponseWriter, r *http.Request) {
+	password := r.FormValue("password")
+	token, ok := models.AdminLogin(password)
+	if !ok {
+		page := "./ui/html/pages/admin-login.html"
+		data := &templateData{Flash: "Invalid password."}
+		app.render(w, http.StatusUnauthorized, page, data)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "admin_session",
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   86400, // 24 hours
+	})
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+}
+
+// Admin logout handler
+func (app *App) adminLogout(w http.ResponseWriter, r *http.Request) {
+	models.AdminLogout()
+	http.SetCookie(w, &http.Cookie{
+		Name:   "admin_session",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	})
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Admin dashboard
+func (app *App) adminDashboard(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("admin_session")
+	if err != nil || !models.ValidateSession(cookie.Value) {
+		http.Redirect(w, r, "/admin/login", http.StatusSeeOther)
+		return
+	}
+
+	page := "./ui/html/pages/admin.html"
+	data := &templateData{
+		GameStatus: models.GetStatus(),
+	}
+	app.render(w, http.StatusOK, page, data)
+}
+
+// Admin game status update
+func (app *App) adminGameStatus(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("admin_session")
+	if err != nil || !models.ValidateSession(cookie.Value) {
+		http.Redirect(w, r, "/admin/login", http.StatusSeeOther)
+		return
+	}
+
+	status := r.FormValue("status")
+	switch status {
+	case "canceled":
+		models.SetTemporaryOverride("CANCELED", 12*time.Hour)
+		app.logger.Info("Admin set game status to CANCELED")
+	case "gameon":
+		models.SetTemporaryOverride("GAME ON", 0) // expires immediately, reverts to default
+		app.logger.Info("Admin set game status to GAME ON")
+	}
+
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+}
